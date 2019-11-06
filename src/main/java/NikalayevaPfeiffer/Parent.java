@@ -47,5 +47,14 @@ public class Parent {
 		sb.append("\t Address: "+address);
 		return sb.toString();
 	}
+	//based on fname+lname
+	public boolean equals(Parent p) {
+		if(this.firstName.equals(p.firstName)&&this.lastName.equals(p.lastName)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
 }

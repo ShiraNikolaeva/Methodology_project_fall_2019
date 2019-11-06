@@ -14,6 +14,8 @@ public class Child {
 	private String emergencyContact;
 
 public Child(String firstName, String lastName, Time timeInPlaygroup, String allergies, LocalDate DOB, Parent parent, String emergencyContact) {
+	//if no transportation entered assuming kid doesn't get it
+	this.transportation=false;
 	this.firstName = firstName;
 	this.lastName = lastName;
 	this.timeInPlaygroup = timeInPlaygroup;
@@ -92,6 +94,16 @@ public String toString() {
 	sb.append("\t Parent Information: " + parent.toString());
 	sb.append("\t Emergency Contact: " + emergencyContact);
 	return sb.toString();
+}
+
+//compares based on fname+lname+DOB
+public boolean equals(Child c) {
+	if(this.firstName.equals(c.firstName)&&this.lastName.equals(c.lastName)&&this.DOB.equals(c.DOB)) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 }
 
