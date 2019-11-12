@@ -13,24 +13,35 @@ public class Child {
 	private Parent parent;
 	private String emergencyContact;
 
-public Child(String firstName, String lastName, Time timeInPlaygroup, String allergies, LocalDate DOB, Parent parent, String emergencyContact) {
+public Child(String firstName, String lastName, Time timeInPlaygroup, String allergies, LocalDate DOB, Parent parent, String emergencyContact) throws Exception {
 	//if no transportation entered assuming kid doesn't get it
+	if(validateDOB(DOB)) {
+		this.DOB = DOB;
+	}
+	else {
+		throw new Exception("Only kids between the ages 1-5 are allowed to the playgroup.");
+	}
 	this.transportation=false;
 	this.firstName = firstName;
 	this.lastName = lastName;
 	this.timeInPlaygroup = timeInPlaygroup;
 	this.allergies = allergies;
-	this.DOB = DOB;
 	this.parent = parent;
 	this.emergencyContact = emergencyContact;
 }
-public Child(String firstName, String lastName, Time timeInPlaygroup, boolean transportation, String allergies, LocalDate DOB, Parent parent, String emergencyContact) {
+public Child(String firstName, String lastName, Time timeInPlaygroup, boolean transportation, String allergies,
+		LocalDate DOB, Parent parent, String emergencyContact) throws Exception {
+	if(validateDOB(DOB)) {
+		this.DOB = DOB;
+	}
+	else {
+		throw new Exception("Only kids between the ages 1-5 are allowed to the playgroup.");
+	}
 	this.firstName = firstName;
 	this.lastName = lastName;
 	this.timeInPlaygroup = timeInPlaygroup;
 	this.transportation = transportation;
 	this.allergies = allergies;
-	this.DOB = DOB;
 	this.parent = parent;
 	this.emergencyContact = emergencyContact;
 	
@@ -50,8 +61,13 @@ public void setTransportation(boolean transportation) {
 public void setAllergies(String allergies) {
 	this.allergies = allergies;
 }
-public void setDOB(LocalDate DOB) {
-	this.DOB = DOB;
+public void setDOB(LocalDate DOB) throws Exception {
+	if(validateDOB(DOB)) {
+		this.DOB = DOB;
+	}
+	else {
+		throw new Exception("Only kids between the ages 1-5 are allowed to the playgroup.");
+	}
 }
 public void setParent (Parent parent) {
 	this.parent = parent;
@@ -104,6 +120,16 @@ public boolean equals(Child c) {
 	else {
 		return false;
 	}
+}
+private boolean validateDOB(LocalDate DOB) {
+	//ages 1-5 are allowed to be in the playgroup
+	LocalDate today=LocalDate.now();
+	LocalDate from=today.minusYears(5);
+	LocalDate to=today.minusYears(1);
+	if(DOB.isBefore(from)&&DOB.isAfter(to)) {
+		return true;
+	}
+	return false;
 }
 }
 

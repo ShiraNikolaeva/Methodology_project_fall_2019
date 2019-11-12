@@ -4,11 +4,15 @@ public class Parent {
 	
 	private String firstName,lastName,phoneNum,address;
 	
-	public Parent(String fName,String lName,String phoneNum,String address) {
+	public Parent(String fName,String lName,String phoneNum,String address) throws Exception {
 		setFirstName(fName);
 		setLastName(lName);
 		setPhoneNum(phoneNum);
 		setAddress(address);
+	}
+	public Parent(String fName,String lName) {
+		setFirstName(fName);
+		setLastName(lName);
 	}
 	
 	//setters
@@ -18,8 +22,13 @@ public class Parent {
 	public void setLastName(String lName) {
 		this.lastName=lName;
 	}
-	public void setPhoneNum(String num) {
-		this.phoneNum=num;
+	public void setPhoneNum(String num) throws Exception {
+		if(validatePhoneNum(num)) {
+			this.phoneNum=num;
+		}
+		else {
+			throw new Exception("Invalid phone number");
+		}
 	}
 	public void setAddress(String address) {
 		this.address=address;
@@ -55,6 +64,13 @@ public class Parent {
 		else {
 			return false;
 		}
+	}
+	private boolean validatePhoneNum(String num) {
+		//validate that its 10 digits
+		if(num.matches("[0-9]+")&&num.length()==10) {
+			return true;
+		}
+		return false;
 	}
 
 }
