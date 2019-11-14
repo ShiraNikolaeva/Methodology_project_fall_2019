@@ -124,9 +124,9 @@ public boolean equals(Child c) {
 private boolean validateDOB(LocalDate DOB) {
 	//ages 1-5 are allowed to be in the playgroup
 	LocalDate today=LocalDate.now();
-	LocalDate from=today.minusYears(5);
-	LocalDate to=today.minusYears(1);
-	if(DOB.isBefore(from)&&DOB.isAfter(to)) {
+	LocalDate from=today.minusDays(1825);
+	LocalDate to=today.minusDays(365);
+	if(!DOB.isBefore(from)&&!DOB.isAfter(to)) {
 		return true;
 	}
 	return false;
