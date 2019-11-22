@@ -183,7 +183,7 @@ public class Playgroup {
 		}
 	}
 	public void editParentLastName(String fname,String lname, String newName) throws Exception {
-		//pull up the child
+		//pull up the parent
 		boolean done=false;
 		for(int i=0;i<parentList.size();i++) {
 			if(parentList.get(i).getFirstName().equalsIgnoreCase(fname)&&parentList.get(i).getLastName().equalsIgnoreCase(lname)) {
@@ -196,7 +196,7 @@ public class Playgroup {
 		}
 	}
 	public void editParentPhoneNum(String fname,String lname, String newNum) throws Exception {
-		//pull up the child
+		//pull up the parent
 		boolean done=false;
 		for(int i=0;i<parentList.size();i++) {
 			if(parentList.get(i).getFirstName().equalsIgnoreCase(fname)&&parentList.get(i).getLastName().equalsIgnoreCase(lname)) {
@@ -209,7 +209,7 @@ public class Playgroup {
 		}
 	}
 	public void editParentAddress(String fname,String lname, String newAddress) throws Exception {
-		//pull up the child
+		//pull up the parent
 		boolean done=false;
 		for(int i=0;i<parentList.size();i++) {
 			if(parentList.get(i).getFirstName().equalsIgnoreCase(fname)&&parentList.get(i).getLastName().equalsIgnoreCase(lname)) {
@@ -220,6 +220,37 @@ public class Playgroup {
 		if(!done) {
 			throw new Exception("There's not such a child in the system.");
 		}
+	}
+	public void removeChild(String fname, String lname, LocalDate DOB) throws Exception {
+		//pull up child if hes in the system. save reference to delete after
+		Child childToRemove = null; //not going to be null by removing,will be initialized if child is in the system, throws exception if not
+		boolean done=false;
+		for(int i=0;i<childrenList.size();i++) {
+			if(childrenList.get(i).getFirstName().equalsIgnoreCase(fname)&&childrenList.get(i).getLastName().equalsIgnoreCase(lname)
+					&&childrenList.get(i).getDOB().equals(DOB)) {
+				childToRemove=childrenList.get(i);
+				done=true;
+			}
+		}
+		if(!done) {
+			throw new Exception("There's not such a child in the system.");
+		}
+		childrenList.remove(childToRemove);
+	}
+	public void removeParent(String fname, String lname) throws Exception { //same as removeChild() but with parent
+		//pull up the parent
+		Parent parentToRemove=null;
+		boolean done=false;
+		for(int i=0;i<parentList.size();i++) {
+			if(parentList.get(i).getFirstName().equalsIgnoreCase(fname)&&parentList.get(i).getLastName().equalsIgnoreCase(lname)) {
+				parentToRemove=parentList.get(i);
+				done=true;
+			}
+		}
+		if(!done) {
+			throw new Exception("There's not such a child in the system.");
+		}
+		parentList.remove(parentToRemove);
 	}
 	//I'm not sure if we need to protect the data, so I return original lists
 	public ArrayList<Parent> listParents(){

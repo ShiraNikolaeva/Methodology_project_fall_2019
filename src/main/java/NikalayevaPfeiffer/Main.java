@@ -10,9 +10,24 @@ public class Main {
 		Scanner keyboard = new Scanner(System.in);
 		Playgroup playgroup = new Playgroup("Playgroup");
 		int userOption;
-		do {
 			// switch statement
 			userOption = menu(keyboard);
+			menuSwitch(userOption,keyboard,playgroup);
+	}
+
+	public static int menu(Scanner keyboard) {
+		System.out.println("Welcome. Please choose an option from the menu");
+		System.out.println("1. Add Information");
+		System.out.println("2. Edit Information");
+		System.out.println("3. Remove");
+		System.out.println("4. List all information");
+		System.out.println("Exit.");
+		int choice = keyboard.nextInt();
+		keyboard.nextLine();
+		return choice;
+	}
+	public static void menuSwitch(int userOption, Scanner keyboard, Playgroup playgroup) {
+		try {
 			switch (userOption) {
 			case 1:
 				addInformation(keyboard , playgroup);
@@ -21,27 +36,18 @@ public class Main {
 				editInformation(keyboard, playgroup);
 				break;
 			case 3:
-				listInformation(keyboard, playgroup);
+				removeInformation(keyboard,playgroup);
 				break;
 			case 4:
-				System.out.println("Goodbye");
-				System.exit(0);
+				listInformation(keyboard, playgroup);
+				break;
 			default:
 				System.out.println("Please enter a valid choice from the list");
+				
 			}
-		} while (userOption != 4);
-
-	}
-
-	public static int menu(Scanner keyboard) {
-		System.out.println("Welcome. Please choose an option from the menu");
-		System.out.println("1. Add Information");
-		System.out.println("2. Edit Information");
-		System.out.println("3. List all information");
-		System.out.println("Exit.");
-		int choice = keyboard.nextInt();
-		keyboard.nextLine();
-		return choice;
+		}catch(Exception e) {
+			e.getMessage();
+			}
 	}
 
 	public static void addInformation(Scanner keyboard, Playgroup playgroup) throws Exception {
@@ -100,14 +106,7 @@ public class Main {
 		}
 		System.out.println("Please enter any allergies the child has: ");
 		String allergies = keyboard.nextLine();
-		System.out.println("Please enter the child's birthday: ");
-		System.out.println("Year:");
-		String year = keyboard.nextLine();
-		System.out.println("Month:");
-		String month  = keyboard.nextLine();
-		System.out.println("Day:");
-		String day = keyboard.nextLine();
-		LocalDate DOB = LocalDate.parse("year-month-day");
+		LocalDate DOB = getDOBfromUser(keyboard);
 		//how to ask it
 		System.out.println("Please enter the parent's first name: ");
 		String PFName = keyboard.nextLine();
@@ -144,7 +143,7 @@ public class Main {
 			System.out.println("Please choose a valid option from the list");
 		}
 	}
-
+	
 	public static int editInformationSubMenu(Scanner keyboard) {
 		System.out.println("Please select what information you would like to edit");
 		System.out.println("1. edit parent information");
@@ -169,7 +168,6 @@ public class Main {
 			System.out.println("Please choose a valid option from the list");
 		}
 	}
-	
 	public static int editInformationSubMenuWithDetails(Scanner keyboard, Playgroup playgroup) {
 		System.out.println("Please select what information you would like to edit");
 		System.out.println("1. edit parent's first name");
@@ -265,14 +263,7 @@ public class Main {
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the child's last name: ");
 		String lName = keyboard.nextLine();
-		System.out.println("Please enter the child's birthday: ");
-		System.out.println("Year:");
-		String year = keyboard.nextLine();
-		System.out.println("Month:");
-		String month  = keyboard.nextLine();
-		System.out.println("Day:");
-		String day = keyboard.nextLine();
-		LocalDate birthday = LocalDate.parse("year-month-day");
+		LocalDate birthday = getDOBfromUser(keyboard);
 		System.out.println("Please enter the edited child's first name: ");
 		String newFirstName = keyboard.nextLine();
 		playgroup.editChildFirstName(fName, lName, birthday, newFirstName);
@@ -283,14 +274,7 @@ public class Main {
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the child's last name: ");
 		String lName = keyboard.nextLine();
-		System.out.println("Please enter the child's birthday: ");
-		System.out.println("Year:");
-		String year = keyboard.nextLine();
-		System.out.println("Month:");
-		String month  = keyboard.nextLine();
-		System.out.println("Day:");
-		String day = keyboard.nextLine();
-		LocalDate birthday = LocalDate.parse("year-month-day");
+		LocalDate birthday = getDOBfromUser(keyboard);
 		System.out.println("Please enter the edited child's first name: ");
 		String newLastName = keyboard.nextLine();
 		playgroup.editChildLastName(fName, lName, birthday, newLastName);
@@ -300,14 +284,7 @@ public class Main {
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the child's last name: ");
 		String lName = keyboard.nextLine();
-		System.out.println("Please enter the child's birthday: ");
-		System.out.println("Year:");
-		String year = keyboard.nextLine();
-		System.out.println("Month:");
-		String month  = keyboard.nextLine();
-		System.out.println("Day:");
-		String day = keyboard.nextLine();
-		LocalDate birthday = LocalDate.parse("year-month-day");
+		LocalDate birthday = getDOBfromUser(keyboard);
 		System.out.println("Please enter the edited child's time in playgroup: ");
 		String temp = keyboard.nextLine();
 		Time newTime;
@@ -327,15 +304,7 @@ public class Main {
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the child's last name: ");
 		String lName = keyboard.nextLine();
-		System.out.println("Please enter the child's birthday: ");
-		System.out.println("Year:");
-		String year = keyboard.nextLine();
-		System.out.println("Month:");
-		String month  = keyboard.nextLine();
-		System.out.println("Day:");
-		String day = keyboard.nextLine();
-		LocalDate birthday = LocalDate.parse("year-month-day");
-		keyboard.nextLine();
+		LocalDate birthday = getDOBfromUser(keyboard);
 		System.out.println("Please enter transportion information.");
 		System.out.println("Y for yes,N for no");
 		String temp = keyboard.next();
@@ -350,14 +319,7 @@ public class Main {
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the child's last name: ");
 		String lName = keyboard.nextLine();
-		System.out.println("Please enter the child's birthday: ");
-		System.out.println("Year:");
-		String year = keyboard.nextLine();
-		System.out.println("Month:");
-		String month  = keyboard.nextLine();
-		System.out.println("Day:");
-		String day = keyboard.nextLine();
-		LocalDate birthday = LocalDate.parse("year-month-day");
+		LocalDate birthday = getDOBfromUser(keyboard);
 		System.out.println("Please enter the edited child's allergy information: ");
 		String allergy = keyboard.nextLine();
 		playgroup.editEmergencyContact(fName, lName, birthday, allergy);
@@ -366,22 +328,8 @@ public class Main {
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the child's last name: ");
 		String lName = keyboard.nextLine();
-		System.out.println("Please enter the child's birthday: ");
-		System.out.println("Year:");
-		String year = keyboard.nextLine();
-		System.out.println("Month:");
-		String month  = keyboard.nextLine();
-		System.out.println("Day:");
-		String day = keyboard.nextLine();
-		LocalDate birthday = LocalDate.parse("year-month-day");
-		System.out.println("Please enter the child's edited birthday");
-		System.out.println("Year:");
-		String newYear = keyboard.nextLine();
-		System.out.println("Month:");
-		String newMonth = keyboard.nextLine();
-		System.out.println("Day:");
-		String newDay = keyboard.nextLine();
-		LocalDate newbirthday = LocalDate.parse ("newYear-newMonth-newDay");
+		LocalDate birthday = getDOBfromUser(keyboard);
+		LocalDate newbirthday = getDOBfromUser(keyboard);
 		//send the information to the editDOB method
 		playgroup.editDOB(fName, lName, birthday , newbirthday);
 	}
@@ -389,14 +337,7 @@ public class Main {
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the child's last name: ");
 		String lName = keyboard.nextLine();
-		System.out.println("Please enter the child's birthday: ");
-		System.out.println("Year:");
-		String year = keyboard.nextLine();
-		System.out.println("Month:");
-		String month  = keyboard.nextLine();
-		System.out.println("Day:");
-		String day = keyboard.nextLine();
-		LocalDate birthday = LocalDate.parse("year-month-day");
+		LocalDate birthday = getDOBfromUser(keyboard);
 		System.out.println("Please enter the edited emergency contact");
 		String number = keyboard.nextLine();
 		playgroup.editEmergencyContact(fName, lName, birthday, number);
@@ -420,7 +361,50 @@ public class Main {
 			int choice = keyboard.nextInt();
 			keyboard.nextLine();
 			return choice;
-}
+	}
+	public static void removeInformation(Scanner keyboard,Playgroup playgroup)throws Exception{
+		int userOption;
+		userOption=removeInformationSubMenu(keyboard);
+		switch(userOption) {
+		case 1: removeChild(keyboard,playgroup);
+			break;
+		case 2: removeParent(keyboard,playgroup);
+			break;
+		default:
+			System.out.println("Please choose a valid option from the list");
+		}
+	}
+	public static int removeInformationSubMenu(Scanner keyboard) {
+		System.out.println("Please select what information you would like to remove");
+		System.out.println("1. Remove a child from the playgroup");
+		System.out.println("2. Remove parent information");
+		int choice=keyboard.nextInt();
+		keyboard.nextLine();
+		return choice;
+	}
+	public static void removeChild(Scanner keyboard, Playgroup playgroup) {
+		System.out.println("Please enter the child's first name: ");
+		String fName = keyboard.nextLine();
+		System.out.println("Please enter the child's last name: ");
+		String lName = keyboard.nextLine();
+		LocalDate birthday = getDOBfromUser(keyboard);
+		try {
+			playgroup.removeChild(fName, lName, birthday);
+		} catch (Exception e) {
+			e.getMessage();
+		}
+	}
+	public static void removeParent(Scanner keyboard,Playgroup playgroup) {
+		System.out.println("Please enter the Paren'ts frist name of which you wish to change: ");
+		String fName = keyboard.nextLine();
+		System.out.println("Please enter the Parent's last name of which you wish to change: ");
+		String lName = keyboard.nextLine();
+		try {
+			playgroup.removeParent(fName, lName);
+		} catch (Exception e) {
+			e.getMessage();
+		}
+	}
 	public static void listParentInfo(Playgroup playgroup) {
 		//Print the parent List
 		playgroup.listParents();
@@ -428,5 +412,17 @@ public class Main {
 	public static void listChildrenInfo(Playgroup playgroup) {
 		//Print the child List
 		playgroup.listChildren();
+	}
+	
+	private static LocalDate getDOBfromUser(Scanner keyboard) {
+		System.out.println("Please enter the child's birthday: ");
+		System.out.println("Year:");
+		String year = keyboard.nextLine();
+		System.out.println("Month:");
+		String month  = keyboard.nextLine();
+		System.out.println("Day:");
+		String day = keyboard.nextLine();
+		LocalDate birthday = LocalDate.parse("year-month-day");
+		return birthday;
 	}
 }
