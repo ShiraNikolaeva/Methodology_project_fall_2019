@@ -148,23 +148,4 @@ public class PlaygroupTest {
 			e.getMessage();
 		}
 	}
-	@Test
-	public void testRemoveChild() {
-		try {
-			underTest.removeChild("Malky","Brown", LocalDate.parse("2017-02-02"));
-			myChildArray.remove(2);
-			assertEquals(myChildArray,underTest.listChildren());
-		}catch(Exception e)
-		{e.getMessage();}
-	}
-	@Test
-	public void testRemoveParent() {
-		try {
-			underTest.removeParent("Totty","Katz");
-			myParentsArray.remove(2);
-			assertEquals(myParentsArray,underTest.listParents());
-		}catch(Exception e) {
-			e.getMessage();
-		}
-	}
 }

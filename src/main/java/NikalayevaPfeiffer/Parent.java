@@ -4,7 +4,7 @@ public class Parent {
 	
 	private String firstName,lastName,phoneNum,address;
 	
-	public Parent(String fName,String lName,String phoneNum,String address) throws Exception {
+	public Parent(String fName,String lName,String phoneNum,String address){
 		setFirstName(fName);
 		setLastName(lName);
 		setPhoneNum(phoneNum);
@@ -15,26 +15,25 @@ public class Parent {
 		setLastName(lName);
 	}
 	
-	//setters
 	public void setFirstName(String fName) {
 		this.firstName=fName;
 	}
 	public void setLastName(String lName) {
 		this.lastName=lName;
 	}
-	public void setPhoneNum(String num) throws Exception {
+	public void setPhoneNum(String num) {
 		if(validatePhoneNum(num)) {
 			this.phoneNum=num;
 		}
 		else {
-			throw new Exception("Invalid phone number");
+			System.out.println("Invalid phone number. Must be 10 digit");
+			return;
 		}
 	}
 	public void setAddress(String address) {
 		this.address=address;
 	}
 	
-	//getters
 	public String getFirstName() {
 		return this.firstName;
 	}
@@ -50,20 +49,16 @@ public class Parent {
 	
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("\t Name: " + firstName + lastName);
-		sb.append("\t Phone Number: "+ phoneNum);
-		sb.append("\t Address: "+address);
-		return sb.toString();
+		return "Name: " + firstName +" "+ lastName+" Phone Number: "+ phoneNum+" Address: "+address;
 	}
-	//based on fname+lname
-	public boolean equals(Parent p) {
-		if(this.firstName.equals(p.firstName)&&this.lastName.equals(p.lastName)) {
-			return true;
-		}
-		else {
+	public boolean isSameParent(Parent p) {
+		if(p==null) {
 			return false;
 		}
+		return (this.firstName.equalsIgnoreCase(p.firstName) && this.lastName.equalsIgnoreCase(p.lastName));
+	}
+	public boolean isSameParent(String fname,String lname) {
+		return (this.firstName.equalsIgnoreCase(fname) && this.lastName.equalsIgnoreCase(lname) );
 	}
 	private boolean validatePhoneNum(String num) {
 		//validate that its 10 digits

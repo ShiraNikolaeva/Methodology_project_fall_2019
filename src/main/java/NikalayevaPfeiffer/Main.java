@@ -1,18 +1,19 @@
 package NikalayevaPfeiffer;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 
 public class Main {
 	public static void main(String[] args) throws Exception {
 		Scanner keyboard = new Scanner(System.in);
 		Playgroup playgroup = new Playgroup("Playgroup");
-		int userOption;
-			// switch statement
+		int userOption=-1;
+		while(userOption!=5) {
 			userOption = menu(keyboard);
-			menuSwitch(userOption,keyboard,playgroup);
+			menuSwitch(userOption, keyboard, playgroup);
+		}
 	}
 
 	public static int menu(Scanner keyboard) {
@@ -21,42 +22,45 @@ public class Main {
 		System.out.println("2. Edit Information");
 		System.out.println("3. Remove");
 		System.out.println("4. List all information");
-		System.out.println("Exit.");
+		System.out.println("5. Exit.");
 		int choice = keyboard.nextInt();
 		keyboard.nextLine();
 		return choice;
 	}
+
 	public static void menuSwitch(int userOption, Scanner keyboard, Playgroup playgroup) {
-		try {
-			switch (userOption) {
-			case 1:
-				addInformation(keyboard , playgroup);
-				break;
-			case 2:
-				editInformation(keyboard, playgroup);
-				break;
-			case 3:
-				removeInformation(keyboard,playgroup);
-				break;
-			case 4:
-				listInformation(keyboard, playgroup);
-				break;
-			default:
-				System.out.println("Please enter a valid choice from the list");
-				
-			}
-		}catch(Exception e) {
-			e.getMessage();
-			}
+		switch (userOption) {
+		case 1:
+			addInformation(keyboard, playgroup);
+			break;
+		case 2:
+			editInformation(keyboard, playgroup);
+			break;
+		case 3:
+			removeInformation(keyboard, playgroup);
+			break;
+		case 4:
+			listInformation(keyboard, playgroup);
+			break;
+		case 5:
+			System.out.println("Exiting...");
+			break;
+		default:
+			System.out.println("Please enter a valid choice from the list");
+
+		}
+
 	}
 
-	public static void addInformation(Scanner keyboard, Playgroup playgroup) throws Exception {
+	public static void addInformation(Scanner keyboard, Playgroup playgroup) {
 		int userOption;
 		userOption = addInformationSubMenu(keyboard);
 		switch (userOption) {
-		case 1: addParentInformation(keyboard, playgroup);
+		case 1:
+			addParentInformation(keyboard, playgroup);
 			break;
-		case 2: addChildInformation(keyboard, playgroup);
+		case 2:
+			addChildInformation(keyboard, playgroup);
 			break;
 		default:
 			System.out.println("Please choose a valid option from the list");
@@ -71,7 +75,8 @@ public class Main {
 		keyboard.nextLine();
 		return choice;
 	}
-	public static void addParentInformation(Scanner keyboard, Playgroup playgroup) throws Exception {
+
+	public static void addParentInformation(Scanner keyboard, Playgroup playgroup) {
 		System.out.println("Please enter the parent's first name");
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the parent's last name");
@@ -80,70 +85,73 @@ public class Main {
 		String number = keyboard.nextLine();
 		System.out.println("Please enter the parent's address: ");
 		String address = keyboard.nextLine();
-		//pass the information to the parent object/parent list
-		//add the parent info to the parent object/parent list
+		// pass the information to the parent object/parent list
+		// add the parent info to the parent object/parent list
 		playgroup.addParent(fName, lName, number, address);
-		
+
 	}
-	public static void addChildInformation(Scanner keyboard, Playgroup playgroup) throws Exception {
+
+	public static void addChildInformation(Scanner keyboard, Playgroup playgroup) {
 		System.out.println("Please enter the child's first name");
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the child's last name");
 		String lName = keyboard.nextLine();
-		System.out.println("Is the child in playgroup for half the day or the full day?"
-				+ "\t Please enter H for half or F for full");
-		//use the enum class
-		String temp = keyboard.nextLine();
-		Time time;
-		if(temp.equalsIgnoreCase("H")) {
-			time=Time.PART_TIME;
-		}
-		else if(temp.equalsIgnoreCase("F")) {
-			time=Time.FULL_TIME;
-		}
-		else {
-			throw new Exception("Invalid time.");
+		Time time = null;
+		boolean done = false;
+		while (!done) {
+			System.out.println("Is the child in playgroup for half the day or the full day?"
+					+ "\t Please enter H for half or F for full");
+			String temp = keyboard.nextLine();
+			if (temp.equalsIgnoreCase("H")) {
+				time = Time.PART_TIME;
+				done = true;
+			} else if (temp.equalsIgnoreCase("F")) {
+				time = Time.FULL_TIME;
+				done = true;
+			}
 		}
 		System.out.println("Please enter any allergies the child has: ");
 		String allergies = keyboard.nextLine();
 		LocalDate DOB = getDOBfromUser(keyboard);
-		//how to ask it
 		System.out.println("Please enter the parent's first name: ");
 		String PFName = keyboard.nextLine();
 		System.out.println("Please enter the parent's last name: ");
 		String PLName = keyboard.nextLine();
-		ArrayList<Parent>p=playgroup.listParents();
-		Parent tempPar=new Parent(PFName,PLName);
-		Parent parent=null;
-		//pull up parent;
-		for(int i=0;i<p.size();i++) {
-			if(p.get(i).equals(tempPar)) {
-				parent=tempPar;
+		ArrayList<Parent> p = playgroup.parentList;
+		Parent tempPar = new Parent(PFName, PLName);
+		Parent parent = null;
+		// pull up parent;
+		for (int i = 0; i < p.size(); i++) {
+			if (p.get(i).isSameParent(tempPar)) {
+				parent = tempPar;
 			}
 		}
-		if(parent==null) {
-			throw new Exception("There's no such parent.");
+		if (parent == null) {
+			System.out.println("Parent is not in the system. Please enter parent information before adding the child.");
+			return;
 		}
 		System.out.println("Please enter an emergency contact: ");
 		String number = keyboard.nextLine();
-		
-		//put all of that information into a child object
-		playgroup.addChild(fName,lName,time,allergies,DOB, parent, number);
+
+		// put all of that information into a child object
+		playgroup.addChild(fName, lName, time, allergies, DOB, parent, number);
 	}
 
-	public static void editInformation(Scanner keyboard, Playgroup playgroup) throws Exception {
+	public static void editInformation(Scanner keyboard, Playgroup playgroup) {
 		int userOption;
 		userOption = editInformationSubMenu(keyboard);
 		switch (userOption) {
-		case 1: editInfo(keyboard, playgroup);
+		case 1:
+			editInfo(keyboard, playgroup);
 			break;
-		case 2: editChildInformation(keyboard, playgroup);
+		case 2:
+			editChildInformation(keyboard, playgroup);
 			break;
 		default:
 			System.out.println("Please choose a valid option from the list");
 		}
 	}
-	
+
 	public static int editInformationSubMenu(Scanner keyboard) {
 		System.out.println("Please select what information you would like to edit");
 		System.out.println("1. edit parent information");
@@ -152,22 +160,27 @@ public class Main {
 		keyboard.nextLine();
 		return choice;
 	}
-	
-	public static void editInfo(Scanner keyboard, Playgroup playgroup) throws Exception {
+
+	public static void editInfo(Scanner keyboard, Playgroup playgroup) {
 		int userOption;
 		userOption = editInformationSubMenuWithDetails(keyboard, playgroup);
 		switch (userOption) {
-		case 1: editParentFirstName(keyboard, playgroup);
+		case 1:
+			editParentFirstName(keyboard, playgroup);
 			break;
-		case 2: editParentLastName(keyboard, playgroup);
+		case 2:
+			editParentLastName(keyboard, playgroup);
 			break;
-		case 3:editParentAddress(keyboard, playgroup);
+		case 3:
+			editParentAddress(keyboard, playgroup);
 			break;
-		case 4:editParentNumber(keyboard,playgroup);
+		case 4:
+			editParentNumber(keyboard, playgroup);
 		default:
 			System.out.println("Please choose a valid option from the list");
 		}
 	}
+
 	public static int editInformationSubMenuWithDetails(Scanner keyboard, Playgroup playgroup) {
 		System.out.println("Please select what information you would like to edit");
 		System.out.println("1. edit parent's first name");
@@ -178,8 +191,9 @@ public class Main {
 		keyboard.nextLine();
 		return choice;
 	}
-	public static void editParentFirstName(Scanner keyboard, Playgroup playgroup) throws Exception {
-		//what information am i checking against? how am i verifying?
+
+	public static void editParentFirstName(Scanner keyboard, Playgroup playgroup) {
+		// what information am i checking against? how am i verifying?
 		System.out.println("Please enter the Paren'ts frist name of which you wish to change: ");
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the Parent's last name of which you wish to change: ");
@@ -187,9 +201,10 @@ public class Main {
 		System.out.println("Please enter the edited first name of the parent: ");
 		String newFirstName = keyboard.nextLine();
 		playgroup.editParentFirstName(fName, lName, newFirstName);
-		
+
 	}
-	public static void editParentLastName(Scanner keyboard, Playgroup playgroup) throws Exception {
+
+	public static void editParentLastName(Scanner keyboard, Playgroup playgroup) {
 		System.out.println("Please enter the Paren'ts frist name of which you wish to change: ");
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the Parent's last name of which you wish to change: ");
@@ -197,10 +212,10 @@ public class Main {
 		System.out.println("Please enter the edited last name of the parent: ");
 		String newLastName = keyboard.nextLine();
 		playgroup.editParentLastName(fName, lName, newLastName);
-		
+
 	}
-	
-	public static void editParentAddress(Scanner keyboard, Playgroup playgroup) throws Exception {
+
+	public static void editParentAddress(Scanner keyboard, Playgroup playgroup) {
 		System.out.println("Please enter the Paren'ts frist name of which you wish to change: ");
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the Parent's last name of which you wish to change: ");
@@ -208,42 +223,50 @@ public class Main {
 		System.out.println("Please enter the edited address of the parent: ");
 		String newAddress = keyboard.nextLine();
 		playgroup.editParentLastName(fName, lName, newAddress);
-		
+
 	}
-	
-	public static void editParentNumber(Scanner keyboard, Playgroup playgroup) throws Exception {
+
+	public static void editParentNumber(Scanner keyboard, Playgroup playgroup) {
 		System.out.println("Please enter the Paren'ts frist name of which you wish to change: ");
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the Parent's last name of which you wish to change: ");
 		String lName = keyboard.nextLine();
 		System.out.println("Please enter the edited phone number of the parent: ");
 		String newPhoneNumber = keyboard.nextLine();
-		playgroup.editParentLastName(fName, lName, newPhoneNumber);
-		
+		playgroup.editParentLastName(fName, lName,newPhoneNumber);
+
 	}
-	
-	public static void editChildInformation(Scanner keyboard, Playgroup playgroup) throws Exception {
+
+	public static void editChildInformation(Scanner keyboard, Playgroup playgroup) {
 		int userOption;
 		userOption = editChildInformationSubMenu(keyboard, playgroup);
 		switch (userOption) {
-		case 1: editChildFirstName(keyboard, playgroup);
+		case 1:
+			editChildFirstName(keyboard, playgroup);
 			break;
-		case 2: editChildLastName(keyboard, playgroup);
+		case 2:
+			editChildLastName(keyboard, playgroup);
 			break;
-		case 3:editTime(keyboard, playgroup);
+		case 3:
+			editTime(keyboard, playgroup);
 			break;
-		case 4:editTransportation(keyboard,playgroup);
+		case 4:
+			editTransportation(keyboard, playgroup);
 			break;
-		case 5:editChildAllergyInfo(keyboard, playgroup);
+		case 5:
+			editChildAllergyInfo(keyboard, playgroup);
 			break;
-		case 6:editChildBirthday(keyboard, playgroup);
+		case 6:
+			editChildBirthday(keyboard, playgroup);
 			break;
-		case 7:editEmergencyContact(keyboard, playgroup);
+		case 7:
+			editEmergencyContact(keyboard, playgroup);
 			break;
 		default:
 			System.out.println("Please choose a valid option from the list");
 		}
 	}
+
 	public static int editChildInformationSubMenu(Scanner keyboard, Playgroup playgroup) {
 		System.out.println("Please select what information you would like to edit");
 		System.out.println("1. edit child's first name");
@@ -257,8 +280,8 @@ public class Main {
 		keyboard.nextLine();
 		return choice;
 	}
-	
-	public static void editChildFirstName(Scanner keyboard, Playgroup playgroup) throws Exception {
+
+	public static void editChildFirstName(Scanner keyboard, Playgroup playgroup) {
 		System.out.println("Please enter the child's first name: ");
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the child's last name: ");
@@ -268,8 +291,8 @@ public class Main {
 		String newFirstName = keyboard.nextLine();
 		playgroup.editChildFirstName(fName, lName, birthday, newFirstName);
 	}
-	
-	public static void editChildLastName(Scanner keyboard, Playgroup playgroup) throws Exception {
+
+	public static void editChildLastName(Scanner keyboard, Playgroup playgroup) {
 		System.out.println("Please enter the child's first name: ");
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the child's last name: ");
@@ -279,7 +302,8 @@ public class Main {
 		String newLastName = keyboard.nextLine();
 		playgroup.editChildLastName(fName, lName, birthday, newLastName);
 	}
-	public static void editTime(Scanner keyboard, Playgroup playgroup) throws Exception {
+
+	public static void editTime(Scanner keyboard, Playgroup playgroup) {
 		System.out.println("Please enter the child's first name: ");
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the child's last name: ");
@@ -287,19 +311,24 @@ public class Main {
 		LocalDate birthday = getDOBfromUser(keyboard);
 		System.out.println("Please enter the edited child's time in playgroup: ");
 		String temp = keyboard.nextLine();
-		Time newTime;
-		if(temp.equalsIgnoreCase("H")) {
-			newTime=Time.PART_TIME;
-		}
-		else if(temp.equalsIgnoreCase("F")) {
-			newTime=Time.FULL_TIME;
-		}
-		else {
-			throw new Exception("Invalid time.");
+		Time newTime = null;
+		boolean done = false;
+		while (!done) {
+			System.out.println("Is the child in playgroup for half the day or the full day?"
+					+ "\t Please enter H for half or F for full");
+			String tempTime = keyboard.nextLine();
+			if (temp.equalsIgnoreCase("H")) {
+				newTime = Time.PART_TIME;
+				done = true;
+			} else if (temp.equalsIgnoreCase("F")) {
+				newTime = Time.FULL_TIME;
+				done = true;
+			}
 		}
 		playgroup.editTime(fName, lName, birthday, newTime);
 	}
-	public static void editTransportation(Scanner keyboard, Playgroup playgroup) throws Exception{
+
+	public static void editTransportation(Scanner keyboard, Playgroup playgroup) {
 		System.out.println("Please enter the child's first name: ");
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the child's last name: ");
@@ -309,13 +338,15 @@ public class Main {
 		System.out.println("Y for yes,N for no");
 		String temp = keyboard.next();
 		boolean transportation;
-		if(temp.equalsIgnoreCase("Y")) {
-			transportation=true;
+		if (temp.equalsIgnoreCase("Y")) {
+			transportation = true;
+		} else {
+			transportation = false;
 		}
-		else {transportation=false;}
 		playgroup.editTransportation(fName, lName, birthday, transportation);
 	}
-	public static void editChildAllergyInfo(Scanner keyboard, Playgroup playgroup) throws Exception {
+
+	public static void editChildAllergyInfo(Scanner keyboard, Playgroup playgroup) {
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the child's last name: ");
 		String lName = keyboard.nextLine();
@@ -324,16 +355,18 @@ public class Main {
 		String allergy = keyboard.nextLine();
 		playgroup.editEmergencyContact(fName, lName, birthday, allergy);
 	}
-	public static void editChildBirthday(Scanner keyboard, Playgroup playgroup) throws Exception {
+
+	public static void editChildBirthday(Scanner keyboard, Playgroup playgroup) {
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the child's last name: ");
 		String lName = keyboard.nextLine();
 		LocalDate birthday = getDOBfromUser(keyboard);
 		LocalDate newbirthday = getDOBfromUser(keyboard);
-		//send the information to the editDOB method
-		playgroup.editDOB(fName, lName, birthday , newbirthday);
+		// send the information to the editDOB method
+		playgroup.editDOB(fName, lName, birthday, newbirthday);
 	}
-	public static void editEmergencyContact(Scanner keyboard, Playgroup playgroup) throws Exception {
+
+	public static void editEmergencyContact(Scanner keyboard, Playgroup playgroup) {
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the child's last name: ");
 		String lName = keyboard.nextLine();
@@ -342,46 +375,61 @@ public class Main {
 		String number = keyboard.nextLine();
 		playgroup.editEmergencyContact(fName, lName, birthday, number);
 	}
+
 	public static void listInformation(Scanner keyboard, Playgroup playgroup) {
 		int userOption;
-		userOption = listInformationSubMenu (keyboard);
+		userOption = listInformationSubMenu(keyboard);
 		switch (userOption) {
-		case 1: listParentInfo(playgroup);
+		case 1:
+			listParentInfo(playgroup);
 			break;
-		case 2: listChildrenInfo(playgroup);
+		case 2:
+			listChildrenInfo(playgroup);
 			break;
-		default: 
+		case 3:
+			System.out.println("Parents:");
+			listParentInfo(playgroup);
+			System.out.println("Children:");
+			listChildrenInfo(playgroup);
+		default:
 			System.out.println("Please choose a valid option from the list");
 		}
 	}
+
 	public static int listInformationSubMenu(Scanner keyboard) {
-			System.out.println("Please select what information you would like to view");
-			System.out.println("1. list all parent information");
-			System.out.println("2. list all child information");
-			int choice = keyboard.nextInt();
-			keyboard.nextLine();
-			return choice;
+		System.out.println("Please select what information you would like to view");
+		System.out.println("1. list all parent information");
+		System.out.println("2. list all child information");
+		System.out.println("3. list all information");
+		int choice = keyboard.nextInt();
+		keyboard.nextLine();
+		return choice;
 	}
-	public static void removeInformation(Scanner keyboard,Playgroup playgroup)throws Exception{
+
+	public static void removeInformation(Scanner keyboard, Playgroup playgroup) {
 		int userOption;
-		userOption=removeInformationSubMenu(keyboard);
-		switch(userOption) {
-		case 1: removeChild(keyboard,playgroup);
+		userOption = removeInformationSubMenu(keyboard);
+		switch (userOption) {
+		case 1:
+			removeChild(keyboard, playgroup);
 			break;
-		case 2: removeParent(keyboard,playgroup);
+		case 2:
+			removeParent(keyboard, playgroup);
 			break;
 		default:
 			System.out.println("Please choose a valid option from the list");
 		}
 	}
+
 	public static int removeInformationSubMenu(Scanner keyboard) {
 		System.out.println("Please select what information you would like to remove");
 		System.out.println("1. Remove a child from the playgroup");
 		System.out.println("2. Remove parent information");
-		int choice=keyboard.nextInt();
+		int choice = keyboard.nextInt();
 		keyboard.nextLine();
 		return choice;
 	}
+
 	public static void removeChild(Scanner keyboard, Playgroup playgroup) {
 		System.out.println("Please enter the child's first name: ");
 		String fName = keyboard.nextLine();
@@ -394,7 +442,8 @@ public class Main {
 			e.getMessage();
 		}
 	}
-	public static void removeParent(Scanner keyboard,Playgroup playgroup) {
+
+	public static void removeParent(Scanner keyboard, Playgroup playgroup) {
 		System.out.println("Please enter the Paren'ts frist name of which you wish to change: ");
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the Parent's last name of which you wish to change: ");
@@ -405,24 +454,28 @@ public class Main {
 			e.getMessage();
 		}
 	}
+
 	public static void listParentInfo(Playgroup playgroup) {
-		//Print the parent List
+		// Print the parent List
 		playgroup.listParents();
 	}
+
 	public static void listChildrenInfo(Playgroup playgroup) {
-		//Print the child List
+		// Print the child List
 		playgroup.listChildren();
 	}
-	
+
 	private static LocalDate getDOBfromUser(Scanner keyboard) {
 		System.out.println("Please enter the child's birthday: ");
 		System.out.println("Year:");
 		String year = keyboard.nextLine();
 		System.out.println("Month:");
-		String month  = keyboard.nextLine();
+		String month = keyboard.nextLine();
 		System.out.println("Day:");
 		String day = keyboard.nextLine();
-		LocalDate birthday = LocalDate.parse("year-month-day");
+		String date=year+month+day;
+		DateTimeFormatter df=DateTimeFormatter.BASIC_ISO_DATE;
+		LocalDate birthday = LocalDate.parse(date,df);
 		return birthday;
 	}
 }
