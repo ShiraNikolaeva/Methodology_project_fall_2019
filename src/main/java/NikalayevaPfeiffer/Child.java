@@ -2,18 +2,18 @@ package NikalayevaPfeiffer;
 
 import java.time.LocalDate;
 
-public class Child {
-	private String firstName;
-	private String lastName;
+public class Child  extends Person{
+	
 	private Time timeInPlaygroup;
 	private boolean transportation;
 	private String allergies;
 	private LocalDate DOB;
 	private Parent parent;
-	private String emergencyContact;
+	private EmergencyContact emergencyContact;
 
 	public Child(String firstName, String lastName, Time timeInPlaygroup, String allergies, LocalDate DOB,
-			Parent parent, String emergencyContact) {
+			Parent parent, EmergencyContact emergencyContact) {
+		super(firstName,lastName);
 		// if no transportation entered assuming kid doesn't get it
 		if (validateDOB(DOB)) {
 			this.DOB = DOB;
@@ -22,19 +22,17 @@ public class Child {
 			return;
 		}
 		this.transportation = false;
-		this.firstName = firstName;
-		this.lastName = lastName;
 		this.timeInPlaygroup = timeInPlaygroup;
 		this.allergies = allergies;
 		this.parent = parent;
 		this.emergencyContact = emergencyContact;
 	}
 	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+		super.setFirstName(firstName);
 	}
 
 	public void setLastName(String lastName) {
-		this.lastName = lastName;
+		super.setLastName(lastName);
 	}
 
 	public void setTimeInPlaygroup(Time timeInPlaygroup) {
@@ -62,16 +60,16 @@ public class Child {
 		this.parent = parent;
 	}
 
-	public void setEmergencyContact(String emergencyContact) {
+	public void setEmergencyContact(EmergencyContact emergencyContact) {
 		this.emergencyContact = emergencyContact;
 	}
 
 	public String getFirstName() {
-		return firstName;
+		return super.getFirstName();
 	}
 
 	public String getLastName() {
-		return lastName;
+		return super.getLastName();
 	}
 
 	public Time getTimeInPlaygroup() {
@@ -94,13 +92,13 @@ public class Child {
 		return parent;
 	}
 
-	public String getEmergencyContact() {
+	public EmergencyContact getEmergencyContact() {
 		return emergencyContact;
 	}
 
 	@Override
 	public String toString() {
-		return "Name: "+firstName+" "+lastName+" Time In Playgroup: "+ timeInPlaygroup+" Transportation: "+transportation+" Allergy Information: " 
+		return super.toString()+" Time In Playgroup: "+ timeInPlaygroup+" Transportation: "+transportation+" Allergy Information: " 
 				+allergies+" Date of Birth: "+DOB+" Parent Information: " + parent.toString() + " Emergency Contact: "+emergencyContact;
 	}
 
@@ -108,10 +106,10 @@ public class Child {
 		if(c==null) {
 			return false;
 		}
-		return (this.firstName.equals(c.firstName) && this.lastName.equals(c.lastName) && this.DOB.equals(c.DOB));
+		return (this.getFirstName().equals(c.getFirstName()) && this.getLastName().equals(c.getLastName()) && this.DOB.equals(c.DOB));
 	}
 	public boolean isSameChild(String firstName, String lastName,  LocalDate DOB) {
-		return (this.firstName.equals(firstName) && this.lastName.equals(lastName) && this.DOB.equals(DOB));
+		return (this.getFirstName().equals(firstName) && this.getLastName().equals(lastName) && this.DOB.equals(DOB));
 	}
 
 	private boolean validateDOB(LocalDate DOB) {

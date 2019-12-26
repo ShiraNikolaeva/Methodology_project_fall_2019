@@ -11,9 +11,9 @@ public class ParentTest {
 		try {
 			Parent p1=new Parent("Mommy","Katz","1234567899","3 Cookie St");
 			Parent p2=new Parent("Totty","Katz","9876543212","3 Cookie St");
-			assertEquals(false,p1.equals(p2));
+			assertEquals(false,p1.isSameParent(p2));
 			Parent p3=new Parent("Mommy","Katz");
-			assertEquals(true,p1.equals(p3));
+			assertEquals(true,p1.isSameParent(p3));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
