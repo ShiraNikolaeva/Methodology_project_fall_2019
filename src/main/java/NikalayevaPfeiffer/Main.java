@@ -11,7 +11,7 @@ public class Main {
 		Scanner keyboard = new Scanner(System.in);
 		Playgroup playgroup = new Playgroup("Playgroup");
 
-		GUI gui =new GUI();
+		GUI gui =new GUI(playgroup);
 		int userOption = -1;
 		while (userOption != 5) {
 			userOption = menu(keyboard);
@@ -281,6 +281,8 @@ public class Main {
 		case 7:
 			editEmergencyContact(keyboard, playgroup);
 			break;
+		case 8:
+			editChildParent(keyboard,playgroup);
 		default:
 			System.out.println("Please choose a valid option from the list");
 		}
@@ -295,6 +297,7 @@ public class Main {
 		System.out.println("5. edit child's allergy information");
 		System.out.println("6. edit child's birthday");
 		System.out.println("7. edit child's emergency contact");
+		System.out.println("8. edit child's parent");
 		int choice = keyboard.nextInt();
 		keyboard.nextLine();
 		return choice;
@@ -392,6 +395,30 @@ public class Main {
 		EmergencyContact eContact = getEmergencyContactFromUser(keyboard);
 		playgroup.editEmergencyContact(fName, lName, birthday, eContact);
 	}
+	public static void editChildParent(Scanner keyboard,Playgroup playgroup) {
+		String fName = keyboard.nextLine();
+		System.out.println("Please enter the child's last name: ");
+		String lName = keyboard.nextLine();
+		LocalDate DOB = getDOBfromUser(keyboard);
+		System.out.println("Please enter the parent's first name: ");
+		String PFName = keyboard.nextLine();
+		System.out.println("Please enter the parent's last name: ");
+		String PLName = keyboard.nextLine();
+		ArrayList<Parent> p = playgroup.getParentList();
+		Parent tempPar = new Parent(PFName, PLName);
+		Parent newParent = null;
+		// pull up parent;
+		for (int i = 0; i < p.size(); i++) {
+			if (p.get(i).isSameParent(tempPar)) {
+				newParent = tempPar;
+			}
+		}
+		if (newParent == null) {
+			System.out.println("Parent is not in the system. Please enter parent information before adding the child.");
+			return;
+		}
+		playgroup.editChildParent(fName, lName, DOB, newParent);
+	}
 
 	public static void removeChild(Scanner keyboard, Playgroup playgroup) {
 		System.out.println("Please enter the child's first name: ");
@@ -457,7 +484,14 @@ public class Main {
 		String fName = keyboard.nextLine();
 		System.out.println("Please enter the Parent's last name: ");
 		String lName = keyboard.nextLine();
-		playgroup.listAllChildrenForAParent(fName, lName);
+		ArrayList<Child>foundChildren=playgroup.listAllChildrenForAParent(fName, lName);
+		if(foundChildren==null) {
+			System.out.println("Nothing found");
+			return;
+		}
+		for(Child c:foundChildren) {
+			System.out.println(c.toString());
+		}
 	}
 
 	public static void search(Scanner keyboard, Playgroup playgroup) {

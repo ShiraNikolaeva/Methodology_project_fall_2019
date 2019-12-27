@@ -229,16 +229,16 @@ public class Playgroup {
 		}
 	}
 
-	public void listAllChildrenForAParent(String fname, String lname) {
+	public ArrayList<Child> listAllChildrenForAParent(String fname, String lname) {
 		Parent parent = null;
 		boolean found = false;
 		if (parentList.isEmpty()) {
 			System.out.println("There are no parents in the system.");
-			return;
+			return null;
 		}
 		if (childrenList.isEmpty()) {
 			System.out.println("There are no children in the system.");
-			return;
+			return null;
 		}
 		for (int i = 0; i < parentList.size(); i++) {
 			if (parentList.get(i).isSameParent(fname, lname)) {
@@ -248,7 +248,7 @@ public class Playgroup {
 		}
 		if (!found) {
 			System.out.println("Parent is not found");
-			return;
+			return null;
 		}
 		ArrayList<Child> foundChildren = new ArrayList<>();
 		for (Child c : childrenList) {
@@ -256,14 +256,7 @@ public class Playgroup {
 				foundChildren.add(c);
 			}
 		}
-		if (!foundChildren.isEmpty()) {
-			System.out.println("Parent: " + parent.toString());
-			for (Child c : foundChildren) {
-				System.out.println(c.toString());
-			}
-		} else {
-			System.out.println("There's no children for that parent in the system");
-		}
+		return foundChildren;
 	}
 
 	public ArrayList<Parent> getParentList() {
