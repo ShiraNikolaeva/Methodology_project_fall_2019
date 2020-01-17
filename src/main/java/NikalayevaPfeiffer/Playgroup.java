@@ -5,45 +5,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Playgroup {
-	private String playgroupName;
-	private ArrayList<Parent> parentList = new ArrayList<Parent>();
-	private ArrayList<Child> childrenList = new ArrayList<Child>();
+	private List<Parent> parentList = new ArrayList<>();
+	private List<Child> childrenList = new ArrayList<>();
 
-	public Playgroup(String name) {
-		this.playgroupName = name;
+	public Playgroup() {
 	}
 
-	// not adding transportation because it should be asked separately from the rest
-	// of the questions. it'll be updated later
-	public void addChild(String fname, String lname, Time time, String allergies, LocalDate DOB, Parent parent,
+	public void addChild(String fname, String lname, TimeInPlaygroup time, String allergies, LocalDate DOB, Parent parent,
 			EmergencyContact eContact) {
-		boolean found = false;
 		Child ch = new Child(fname, lname, time, allergies, DOB, parent, eContact);
-		if (!childrenList.isEmpty()) {
-			for (int i = 0; i < childrenList.size(); i++) {
-				if (childrenList.get(i).isSameChild(ch)) {
-					found = true;
-					return;
-				}
+		if (validateDOB(DOB)) {
+			Child temp = findChild(ch);
+			if (temp == null) {
+				childrenList.add(ch);
 			}
-		}
-		if (!found) {
-			childrenList.add(ch);
 		}
 	}
 
 	public void addParent(String fname, String lname, String num, String address) {
 		Parent p = new Parent(fname, lname, num, address);
-		boolean found = false;
 		if (!parentList.isEmpty()) {
-			for (int i = 0; i < parentList.size(); i++) {
-				if (parentList.get(i).isSameParent(p)) {
-					found = true;
-				}
+			Parent temp = findParent(p);
+			if (temp == null) {
+				parentList.add(p);
 			}
-		}
-		if (!found) {
-			parentList.add(p);
 		}
 	}
 
@@ -52,10 +37,12 @@ public class Playgroup {
 			System.out.println("No children in the system.");
 			return;
 		}
-		for (int i = 0; i < childrenList.size(); i++) {
-			if (childrenList.get(i).isSameChild(fname, lname, DOB)) {
-				childrenList.get(i).setFirstName(newName);
-			}
+		Child child = new Child(fname, lname, DOB);
+		Child temp = findChild(child);
+		if (temp != null) {
+
+			temp.setFirstName(newName);
+
 		}
 	}
 
@@ -64,22 +51,26 @@ public class Playgroup {
 			System.out.println("No children in the system.");
 			return;
 		}
-		for (int i = 0; i < childrenList.size(); i++) {
-			if (childrenList.get(i).isSameChild(fname, lname, DOB)) {
-				childrenList.get(i).setLastName(newName);
-			}
+		Child child = new Child(fname, lname, DOB);
+		Child temp = findChild(child);
+		if (temp != null) {
+
+			temp.setLastName(newName);
+
 		}
 	}
 
-	public void editTime(String fname, String lname, LocalDate DOB, Time newTime) {
+	public void editTime(String fname, String lname, LocalDate DOB, TimeInPlaygroup newTime) {
 		if (childrenList.isEmpty()) {
 			System.out.println("No children in the system.");
 			return;
 		}
-		for (int i = 0; i < childrenList.size(); i++) {
-			if (childrenList.get(i).isSameChild(fname, lname, DOB)) {
-				childrenList.get(i).setTimeInPlaygroup(newTime);
-			}
+		Child child = new Child(fname, lname, DOB);
+		Child temp = findChild(child);
+		if (temp != null) {
+
+			temp.setTimeInPlaygroup(newTime);
+
 		}
 	}
 
@@ -88,10 +79,12 @@ public class Playgroup {
 			System.out.println("No children in the system.");
 			return;
 		}
-		for (int i = 0; i < childrenList.size(); i++) {
-			if (childrenList.get(i).isSameChild(fname, lname, DOB)) {
-				childrenList.get(i).setTransportation(tr);
-			}
+		Child child = new Child(fname, lname, DOB);
+		Child temp = findChild(child);
+		if (temp != null) {
+
+			temp.setTransportation(tr);
+
 		}
 	}
 
@@ -100,10 +93,12 @@ public class Playgroup {
 			System.out.println("No children in the system.");
 			return;
 		}
-		for (int i = 0; i < childrenList.size(); i++) {
-			if (childrenList.get(i).isSameChild(fname, lname, DOB)) {
-				childrenList.get(i).setAllergies(al);
-			}
+		Child child = new Child(fname, lname, DOB);
+		Child temp = findChild(child);
+		if (temp != null) {
+
+			temp.setAllergies(al);
+
 		}
 	}
 
@@ -112,9 +107,11 @@ public class Playgroup {
 			System.out.println("No children in the system.");
 			return;
 		}
-		for (int i = 0; i < childrenList.size(); i++) {
-			if (childrenList.get(i).isSameChild(fname, lname, DOB)) {
-				childrenList.get(i).setDOB(newDOB);
+		Child child = new Child(fname, lname, DOB);
+		Child temp = findChild(child);
+		if (temp != null) {
+			if (validateDOB(newDOB)) {
+				temp.setDOB(newDOB);
 			}
 		}
 	}
@@ -124,10 +121,12 @@ public class Playgroup {
 			System.out.println("No children in the system.");
 			return;
 		}
-		for (int i = 0; i < childrenList.size(); i++) {
-			if (childrenList.get(i).isSameChild(fname, lname, DOB)) {
-				childrenList.get(i).setEmergencyContact(eContact);
-			}
+		Child child = new Child(fname, lname, DOB);
+		Child temp = findChild(child);
+		if (temp != null) {
+
+			temp.setEmergencyContact(eContact);
+
 		}
 	}
 
@@ -137,16 +136,17 @@ public class Playgroup {
 			System.out.println("No children in the system.");
 			return;
 		}
-		for (int i = 0; i < childrenList.size(); i++) {
-			if (childrenList.get(i).isSameChild(fname, lname, DOB)) {
-				// look for parent in parentList
-				for (int j = 0; j < parentList.size(); j++) {
-					if (parentList.get(j).isSameParent(newParent)) {
-						childrenList.get(i).setParent(newParent);
-					}
-				}
+		Child child = new Child(fname, lname, DOB);
+		Child temp = findChild(child);
+		if (temp != null) {
+
+			Parent found = findParent(newParent);
+			if (found != null) {
+				temp.setParent(newParent);
 			}
+
 		}
+
 	}
 
 	public void editParentFirstName(String fname, String lname, String newName) {
@@ -154,9 +154,11 @@ public class Playgroup {
 			System.out.println("No parents in the system.");
 			return;
 		}
-		for (int i = 0; i < parentList.size(); i++) {
-			if (parentList.get(i).isSameParent(fname, lname)) {
-				parentList.get(i).setFirstName(newName);
+		Parent p = new Parent(fname, lname);
+		if (!parentList.isEmpty()) {
+			Parent temp = findParent(p);
+			if (temp != null) {
+				temp.setFirstName(newName);
 			}
 		}
 	}
@@ -166,9 +168,11 @@ public class Playgroup {
 			System.out.println("No parents in the system.");
 			return;
 		}
-		for (int i = 0; i < parentList.size(); i++) {
-			if (parentList.get(i).isSameParent(fname, lname)) {
-				parentList.get(i).setLastName(newName);
+		Parent p = new Parent(fname, lname);
+		if (!parentList.isEmpty()) {
+			Parent temp = findParent(p);
+			if (temp != null) {
+				temp.setLastName(newName);
 			}
 		}
 	}
@@ -178,9 +182,11 @@ public class Playgroup {
 			System.out.println("No parents in the system.");
 			return;
 		}
-		for (int i = 0; i < parentList.size(); i++) {
-			if (parentList.get(i).isSameParent(fname, lname)) {
-				parentList.get(i).setPhoneNum(newNum);
+		Parent p = new Parent(fname, lname);
+		if (!parentList.isEmpty()) {
+			Parent temp = findParent(p);
+			if (temp != null) {
+				temp.setPhoneNum(newNum);
 			}
 		}
 	}
@@ -190,9 +196,11 @@ public class Playgroup {
 			System.out.println("No parents in the system.");
 			return;
 		}
-		for (int i = 0; i < parentList.size(); i++) {
-			if (parentList.get(i).isSameParent(fname, lname)) {
-				parentList.get(i).setAddress(newAddress);
+		Parent p = new Parent(fname, lname);
+		if (!parentList.isEmpty()) {
+			Parent temp = findParent(p);
+			if (temp != null) {
+				temp.setAddress(newAddress);
 			}
 		}
 	}
@@ -218,20 +226,14 @@ public class Playgroup {
 			System.out.println("No parents in the system.");
 			return;
 		}
-		Parent parentToRemove = null;
-		for (int i = 0; i < parentList.size(); i++) {
-			if (parentList.get(i).isSameParent(fname, lname)) {
-				parentToRemove = parentList.get(i);
-			}
-		}
+		Parent parentToRemove = findParent(new Parent(fname, lname));
 		if (parentToRemove != null) {
 			parentList.remove(parentToRemove);
 		}
 	}
 
-	public ArrayList<Child> listAllChildrenForAParent(String fname, String lname) {
+	public List<Child> listAllChildrenForAParent(String fname, String lname) {
 		Parent parent = null;
-		boolean found = false;
 		if (parentList.isEmpty()) {
 			System.out.println("There are no parents in the system.");
 			return null;
@@ -240,13 +242,9 @@ public class Playgroup {
 			System.out.println("There are no children in the system.");
 			return null;
 		}
-		for (int i = 0; i < parentList.size(); i++) {
-			if (parentList.get(i).isSameParent(fname, lname)) {
-				parent = parentList.get(i);
-				found = true;
-			}
-		}
-		if (!found) {
+		parent = findParent(new Parent(fname, lname));
+
+		if (parent == null) {
 			System.out.println("Parent is not found");
 			return null;
 		}
@@ -259,7 +257,7 @@ public class Playgroup {
 		return foundChildren;
 	}
 
-	public ArrayList<Parent> getParentList() {
+	public List<Parent> getParentList() {
 		if (parentList.isEmpty()) {
 			return null;
 		}
@@ -270,7 +268,7 @@ public class Playgroup {
 		return copy;
 	}
 
-	public ArrayList<Child> getChildrenList() {
+	public List<Child> getChildrenList() {
 		if (childrenList.isEmpty()) {
 			return null;
 		}
@@ -281,19 +279,11 @@ public class Playgroup {
 		return copy;
 	}
 
-	public ArrayList<Person> search(String target) {
+	public List<Person> search(String target) {
 		ArrayList<Person> mixedList = new ArrayList<>();
 		ArrayList<Person> listToReturn = new ArrayList<>();
-		if (parentList.isEmpty() && childrenList.isEmpty()) {
-			return listToReturn;
-		}
-
-		if (!parentList.isEmpty()) {
-			mixedList.addAll(parentList);
-		}
-		if (!childrenList.isEmpty()) {
-			mixedList.addAll(childrenList);
-		}
+		mixedList.addAll(parentList);
+		mixedList.addAll(childrenList);
 		for (Person p : mixedList) {
 			if (p.toString().toLowerCase().contains(target.toLowerCase())) {
 				listToReturn.add(p);
@@ -302,4 +292,34 @@ public class Playgroup {
 		return listToReturn;
 	}
 
+	private Parent findParent(Parent parent) {
+		if (!parentList.isEmpty()) {
+			for (int i = 0; i < parentList.size(); i++) {
+				if (parentList.get(i).isSameParent(parent)) {
+					return parentList.get(i);
+				}
+			}
+		}
+		return null;
+	}
+
+	private Child findChild(Child child) {
+			for (int i = 0; i < childrenList.size(); i++) {
+				if (childrenList.get(i).isSameChild(child)) {
+					return childrenList.get(i);
+				}
+			}
+		return null;
+	}
+
+	public boolean validateDOB(LocalDate dob) {
+		// ages 1-5 are allowed to be in the playgroup. using days to ensure correct age
+		LocalDate today = LocalDate.now();
+		LocalDate from = today.minusDays(1825);
+		LocalDate to = today.minusDays(365);
+		if (!dob.isBefore(from) && !dob.isAfter(to)) {
+			return true;
+		}
+		return false;
+	}
 }

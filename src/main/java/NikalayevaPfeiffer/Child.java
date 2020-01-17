@@ -2,40 +2,32 @@ package NikalayevaPfeiffer;
 
 import java.time.LocalDate;
 
-public class Child  extends Person{
-	
-	private Time timeInPlaygroup;
+public class Child extends Person {
+
+	private TimeInPlaygroup timeInPlaygroup;
 	private boolean transportation;
 	private String allergies;
-	private LocalDate DOB;
+	private LocalDate dob;
 	private Parent parent;
 	private EmergencyContact emergencyContact;
 
-	public Child(String firstName, String lastName, Time timeInPlaygroup, String allergies, LocalDate DOB,
+	public Child(String firstName, String lastName, TimeInPlaygroup timeInPlaygroup, String allergies, LocalDate dob,
 			Parent parent, EmergencyContact emergencyContact) {
-		super(firstName,lastName);
-		// if no transportation entered assuming kid doesn't get it
-		if (validateDOB(DOB)) {
-			this.DOB = DOB;
-		} else {
-			System.out.println("Only kids between the ages 1-5 are allowed to the playgroup.");
-			return;
-		}
+		super(firstName, lastName);
+		this.dob = dob;
 		this.transportation = false;
 		this.timeInPlaygroup = timeInPlaygroup;
 		this.allergies = allergies;
 		this.parent = parent;
 		this.emergencyContact = emergencyContact;
 	}
-	public void setFirstName(String firstName) {
-		super.setFirstName(firstName);
+	public Child(String fname,String lname,LocalDate dob) {
+		super(fname, lname);
+		this.dob=dob;
 	}
 
-	public void setLastName(String lastName) {
-		super.setLastName(lastName);
-	}
 
-	public void setTimeInPlaygroup(Time timeInPlaygroup) {
+	public void setTimeInPlaygroup(TimeInPlaygroup timeInPlaygroup) {
 		this.timeInPlaygroup = timeInPlaygroup;
 	}
 
@@ -47,13 +39,10 @@ public class Child  extends Person{
 		this.allergies = allergies;
 	}
 
-	public void setDOB(LocalDate DOB) {
-		if (validateDOB(DOB)) {
-			this.DOB = DOB;
-		} else {
-			System.out.println("Only kids between the ages 1-5 are allowed to the playgroup.");
-			return;
-		}
+	public void setDOB(LocalDate dob) {
+
+		this.dob = dob;
+
 	}
 
 	public void setParent(Parent parent) {
@@ -72,7 +61,7 @@ public class Child  extends Person{
 		return super.getLastName();
 	}
 
-	public Time getTimeInPlaygroup() {
+	public TimeInPlaygroup getTimeInPlaygroup() {
 		return timeInPlaygroup;
 	}
 
@@ -85,7 +74,7 @@ public class Child  extends Person{
 	}
 
 	public LocalDate getDOB() {
-		return DOB;
+		return dob;
 	}
 
 	public Parent getParent() {
@@ -98,28 +87,21 @@ public class Child  extends Person{
 
 	@Override
 	public String toString() {
-		return super.toString()+" Time In Playgroup: "+ timeInPlaygroup+" Transportation: "+transportation+" Allergy Information: " 
-				+allergies+" Date of Birth: "+DOB+" Parent Information: " + parent.toString() + " Emergency Contact: "+emergencyContact;
+		return super.toString() + " Time In Playgroup: " + timeInPlaygroup + " Transportation: " + transportation
+				+ " Allergy Information: " + allergies + " Date of Birth: " + dob + " Parent Information: "
+				+ parent.toString() + " Emergency Contact: " + emergencyContact;
 	}
 
 	public boolean isSameChild(Child c) {
-		if(c==null) {
+		if (c == null) {
 			return false;
 		}
-		return (this.getFirstName().equals(c.getFirstName()) && this.getLastName().equals(c.getLastName()) && this.DOB.equals(c.DOB));
-	}
-	public boolean isSameChild(String firstName, String lastName,  LocalDate DOB) {
-		return (this.getFirstName().equals(firstName) && this.getLastName().equals(lastName) && this.DOB.equals(DOB));
+		return (this.getFirstName().equals(c.getFirstName()) && this.getLastName().equals(c.getLastName())
+				&& this.dob.equals(c.dob));
 	}
 
-	private boolean validateDOB(LocalDate DOB) {
-		// ages 1-5 are allowed to be in the playgroup. using days to ensure correct age
-		LocalDate today = LocalDate.now();
-		LocalDate from = today.minusDays(1825);
-		LocalDate to = today.minusDays(365);
-		if (!DOB.isBefore(from) && !DOB.isAfter(to)) {
-			return true;
-		}
-		return false;
+	public boolean isSameChild(String firstName, String lastName, LocalDate DOB) {
+		return (this.getFirstName().equals(firstName) && this.getLastName().equals(lastName) && this.dob.equals(DOB));
 	}
+
 }

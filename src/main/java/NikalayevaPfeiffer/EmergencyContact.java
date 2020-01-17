@@ -2,18 +2,20 @@ package NikalayevaPfeiffer;
 
 public class EmergencyContact extends Person {
 
-	String relation;
-	String phoneNumber;
+	private String relation;
+	private String phoneNumber;
 
-	// constructor
+
 	public EmergencyContact(String firstName, String lastName, String relation, String phoneNumber) {
 		super(firstName, lastName);
+		if(validatePhoneNum(phoneNumber)) {
+			this.phoneNumber = phoneNumber;
+		}
 		// add validation
 		this.relation = relation;
-		this.phoneNumber = phoneNumber;
+		
 	}
 
-	// getters and setters
 	public void setRelation(String relation) {
 		this.relation = relation;
 	}
@@ -33,6 +35,13 @@ public class EmergencyContact extends Person {
 	@Override
 	public String toString() {
 		return super.toString() + "relation " + relation + " Phone Number: " + phoneNumber;
+	}
+	private boolean validatePhoneNum(String num) {
+		// validate that its 10 digits
+		if (num.matches("[0-9]+") && num.length() == 10) {
+			return true;
+		}
+		return false;
 	}
 
 }

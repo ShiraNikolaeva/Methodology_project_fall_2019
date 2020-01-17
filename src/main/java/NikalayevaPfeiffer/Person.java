@@ -1,6 +1,6 @@
 package NikalayevaPfeiffer;
 
-public class Person implements Comparable<Person>{
+public class Person {
 	private String firstName;
 	private String lastName;
 	
@@ -36,19 +36,9 @@ public class Person implements Comparable<Person>{
 			return false;
 		}
 		Person other = (Person) obj;
-		if(!this.getFirstName().equals(other.getFirstName()) && !this.getLastName().equals(other.getLastName())) {
-			return false;
-		}
-		else {
-			return true;
-		}
+		return (!this.getFirstName().equals(other.getFirstName()) && !this.getLastName().equals(other.getLastName()));
 	}
 
-	@Override
-	public int compareTo(Person p) {
-		return this.compareTo(p);
-	
-	}
 	public String toString() {
 		return "First name: "+this.firstName+" Last name: "+this.lastName;
 	}

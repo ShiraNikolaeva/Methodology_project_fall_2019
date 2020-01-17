@@ -16,13 +16,13 @@ public class PlaygroupTest {
 
 	@Before
 	public void init() {
-		underTest = new Playgroup("Sunny Day");
+		underTest = new Playgroup();
 		Parent p = new Parent("Mommy", "Katz", "1234567899", "3 Cookie St");
 		EmergencyContact ec = new EmergencyContact("Zaidy", "Brown", "Zaidy", "1234569877");
 		underTest.addParent("Mommy", "Katz", "1234567899", "3 Cookie St");
-		underTest.addChild("Feigy", "Brown", Time.PART_TIME, "none", LocalDate.parse("2017-02-02"), p, ec);
+		underTest.addChild("Feigy", "Brown", TimeInPlaygroup.PART_TIME, "none", LocalDate.parse("2017-02-02"), p, ec);
 		myParentsArray.add(p);
-		myChildArray.add(new Child("Feigy", "Brown", Time.PART_TIME, "none", LocalDate.parse("2017-02-02"), p, ec));
+		myChildArray.add(new Child("Feigy", "Brown", TimeInPlaygroup.PART_TIME, "none", LocalDate.parse("2017-02-02"), p, ec));
 	}
 
 	@After
@@ -69,8 +69,8 @@ public class PlaygroupTest {
 
 	@Test
 	public void testEditTime() {
-		underTest.editTime("Feigy", "Brown", LocalDate.parse("2017-02-02"), Time.FULL_TIME);
-		myChildArray.get(0).setTimeInPlaygroup(Time.FULL_TIME);
+		underTest.editTime("Feigy", "Brown", LocalDate.parse("2017-02-02"), TimeInPlaygroup.FULL_TIME);
+		myChildArray.get(0).setTimeInPlaygroup(TimeInPlaygroup.FULL_TIME);
 		assertEquals(myChildArray.get(0).getTimeInPlaygroup(), underTest.getChildrenList().get(0).getTimeInPlaygroup());
 
 	}
@@ -170,7 +170,7 @@ public class PlaygroupTest {
 		myPersonArray.addAll(myParentsArray);
 		myPersonArray.addAll(myChildArray);
 		ArrayList<Person> searchResult = new ArrayList<>();
-		searchResult = underTest.search("Katz");
+		searchResult = (ArrayList<Person>) underTest.search("Katz");
 		assertEquals(myPersonArray, searchResult);
 	}
 }
