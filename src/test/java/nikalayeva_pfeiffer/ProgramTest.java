@@ -1,4 +1,4 @@
-package NikalayevaPfeiffer;
+package nikalayeva_pfeiffer;
 
 
 
@@ -7,6 +7,9 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import nikalayeva_pfeiffer.Program;
+import nikalayeva_pfeiffer.io.Prompter;
 
 public class ProgramTest {
 
@@ -22,7 +25,7 @@ public class ProgramTest {
 	@Test
 	public void testOptionOneMainMenu() {
 		Mockito.when(prompter.promptForInt("Enter choice from main menu")).thenReturn(1);
-		int choice = program.menu();
+		int choice = program.promptForMainMenuOption();
 		int verifyChoice = 1;
 		assertEquals(verifyChoice, choice);
 
@@ -31,7 +34,7 @@ public class ProgramTest {
 	@Test
 	public void testOptionTwoMainMenu() {
 		Mockito.when(prompter.promptForInt("Enter choice from main menu")).thenReturn(2);
-		int choice = program.menu();
+		int choice = program.promptForMainMenuOption();
 		int verifyChoice = 2;
 		assertEquals(verifyChoice, choice);
 
@@ -40,7 +43,7 @@ public class ProgramTest {
 	@Test
 	public void testOptionThreeMainMenu() {
 		Mockito.when(prompter.promptForInt("Enter choice from main menu")).thenReturn(3);
-		int choice = program.menu();
+		int choice = program.promptForMainMenuOption();
 		int verifyChoice = 3;
 		assertEquals(verifyChoice, choice);
 
@@ -49,7 +52,7 @@ public class ProgramTest {
 	@Test
 	public void testOptionOneParentMenu() {
 		Mockito.when(prompter.promptForInt("Choice from parent menu")).thenReturn(1);
-		int choice = program.parentSubMenu();
+		int choice = program.promptForParentSubMenuOption();
 		int verifyChoice = 1;
 		assertEquals(verifyChoice, choice);
 
@@ -58,7 +61,7 @@ public class ProgramTest {
 	@Test
 	public void testOptionTwoParentMenu() {
 		Mockito.when(prompter.promptForInt("Choice from parent menu")).thenReturn(2);
-		int choice = program.parentSubMenu();
+		int choice = program.promptForParentSubMenuOption();
 		int verifyChoice = 2;
 		assertEquals(verifyChoice, choice);
 
@@ -67,7 +70,7 @@ public class ProgramTest {
 	@Test
 	public void testOptionThreeParentMenu() {
 		Mockito.when(prompter.promptForInt("Choice from parent menu")).thenReturn(3);
-		int choice = program.parentSubMenu();
+		int choice = program.promptForParentSubMenuOption();
 		int verifyChoice = 3;
 		assertEquals(verifyChoice, choice);
 	}
@@ -75,7 +78,7 @@ public class ProgramTest {
 	@Test
 	public void testOptionOneEditParentMenu() {
 		Mockito.when(prompter.promptForInt("Choice from edit parent menu")).thenReturn(1);
-		int choice = program.editInformationSubMenuWithDetails();
+		int choice = program.promptForEditParentInformationSubMenuOption();
 		int verifyChoice = 1;
 		assertEquals(verifyChoice, choice);
 	}
@@ -83,7 +86,7 @@ public class ProgramTest {
 	@Test
 	public void testOptionTwoEditParentMenu() {
 		Mockito.when(prompter.promptForInt("Choice from edit parent menu")).thenReturn(2);
-		int choice = program.editInformationSubMenuWithDetails();
+		int choice = program.promptForEditParentInformationSubMenuOption();
 		int verifyChoice = 2;
 		assertEquals(verifyChoice, choice);
 	}
@@ -91,7 +94,7 @@ public class ProgramTest {
 	@Test
 	public void testOptionThreeEditParentMenu() {
 		Mockito.when(prompter.promptForInt("Choice from edit parent menu")).thenReturn(3);
-		int choice = program.editInformationSubMenuWithDetails();
+		int choice = program.promptForEditParentInformationSubMenuOption();
 		int verifyChoice = 3;
 		assertEquals(verifyChoice, choice);
 	}
@@ -99,7 +102,7 @@ public class ProgramTest {
 	@Test
 	public void testOptionFourParentMenu() {
 		Mockito.when(prompter.promptForInt("Choice from edit parent menu")).thenReturn(4);
-		int choice = program.editInformationSubMenuWithDetails();
+		int choice = program.promptForEditParentInformationSubMenuOption();
 		int verifyChoice = 4;
 		assertEquals(verifyChoice, choice);
 	}
